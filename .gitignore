@@ -20,3 +20,4 @@ Thumbs.db
 
 # generated QR images
 generated_qrs/
+qr_maker/generated_qrs
