@@ -21,14 +21,23 @@ def make_qr(url: str):
     return qr
 
 
-def save_qr_image(qr, url):
+def save_qr_image(qr):
+    if getattr(sys, "frozen", False):
+        base_dir = os.path.dirname(sys.executable)
+    else:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    output_dir = os.path.join(base_dir, "generated_qrs")
+    os.makedirs(output_dir, exist_ok=True)
+
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"qr_{timestamp}.png"
+    filepath = os.path.join(output_dir, filename)
 
     img = qr.make_image(fill_color="black", back_color="white")
-    img.save(filename)
+    img.save(filepath)
 
-    return filename
+    return filepath
 
 
 def print_qr_terminal(qr):
@@ -51,7 +60,7 @@ def main():
 
     print_qr_terminal(qr)
 
-    filename = save_qr_image(qr, url)
+    filename = save_qr_image(qr)
 
     print(f"\n✅ QR code saved as: {filename}")
     input("\nPress Enter to exit...")
